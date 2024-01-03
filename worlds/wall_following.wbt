@@ -1,0 +1,79 @@
+#VRML_SIM R2022b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/robots/adept/pioneer3/protos/Pioneer3dx.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/apartment_structure/protos/Wall.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  fieldOfView 1
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  position -2 0 10
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 6 6
+  floorTileSize 0.2 0.2
+  wallHeight 0.4
+}
+Pioneer3dx {
+  rotation 0 0 1 1.57
+  controller "my_lab5_controller"
+  supervisor TRUE
+  extensionSlot [
+    Camera {
+      translation 0 0 0.21
+      width 640
+      height 640
+    }
+    Display {
+      name "sensorDisplay"
+      width 500
+      height 500
+    }
+  ]
+}
+Wall {
+  translation -2 -1.8 0
+  name "wall 1"
+  size 1.8 0.1 0.4
+}
+Wall {
+  translation 1.7 0.85 0
+  rotation 0 0 1 1.57
+  name "wall 2"
+  size 1.7 0.1 0.4
+}
+Wall {
+  translation -1.8 0.87 0
+  name "wall 3"
+  size 2.2 0.1 0.4
+}
+Wall {
+  translation 1.7 0 0
+  name "wall 4"
+  size 2.4 0.1 0.4
+}
+Wall {
+  translation -0.66 0.32 0
+  rotation 0 0 1 1.57
+  name "wall 5"
+  size 1.2 0.1 0.4
+}
+Wall {
+  translation 1.3 1.65 0
+  name "wall 6"
+  size 0.8 0.1 0.4
+}
+Wall {
+  translation 0 -0.85 0
+  rotation 0 0 1 -0.7416996938995747
+  name "left angle wall 4"
+  size 1.8 0.1 0.4
+}

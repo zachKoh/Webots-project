@@ -1,0 +1,89 @@
+#VRML_SIM R2022b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/robots/adept/pioneer3/protos/Pioneer3dx.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/traffic/protos/TrafficCone.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/apartment_structure/protos/Wall.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5812662584967996 -0.5752853153086006 0.5754792287506264 4.177066973243786
+  position 1.9175485782485717 -0.0709813221824902 22.326830882556223
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 12 9
+  floorTileSize 1 1
+}
+Wall {
+  translation -2.48842 1.92079 0
+  rotation 0 0 1 0.4
+  name "TopLeft-1"
+  size 4 1.5 0.5
+}
+Wall {
+  translation -3.34317 0.739671 0
+  rotation 0 0 1 0.4
+  name "TopLeft-2"
+  size 1.5 3 0.5
+}
+Wall {
+  translation 3 2 0
+  rotation 0 0 1 0.75
+  name "Triangle-1"
+  size 3 0.2 0.5
+}
+Wall {
+  translation 4.1 1.6 0
+  rotation 0 0 1 1.5707996938995747
+  name "Triangle-2"
+  size 3 0.2 0.5
+}
+Wall {
+  translation 3.04 0.6 0
+  rotation 0 0 1 -0.39
+  name "Triangle-3"
+  size 2.45 0.2 0.5
+}
+Wall {
+  translation 0.748815 -1 0
+  rotation 0 0 1 -0.1
+  name "MidBottom-1"
+  size 2 2 0.5
+}
+Wall {
+  translation -0.0120929 -1.46868 0
+  rotation 0 0 1 -0.8
+  name "MidBottom-2"
+  size 2.4 2 0.5
+}
+Wall {
+  translation 0.761822 -2.386 0
+  rotation 0 0 1 -0.9691003061004254
+  name "MidBottom-3"
+  size 0.5 1.8 0.5
+}
+Pioneer3dx {
+  translation -4.5 3 0.0975
+  controller "my_lab5_controller"
+  supervisor TRUE
+  extensionSlot [
+    Camera {
+      translation 0 0 0.21
+    }
+    Display {
+      name "sensorDisplay"
+      width 300
+      height 300
+    }
+  ]
+}
+TrafficCone {
+  translation 2.74859 -3.25946 0
+}
