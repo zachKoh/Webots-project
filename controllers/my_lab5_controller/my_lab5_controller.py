@@ -15,6 +15,11 @@ import pioneer_proxsensors1 as pps
 
 from pioneer_nav2 import MoveState
 
+# for distance calculations
+distance = 0
+prev_x = 0
+prev_y = 0
+
 def run_robot(robot):
         
     # get the time step of the current world.
@@ -43,7 +48,7 @@ def run_robot(robot):
     while (robot_pose.x != target_x) and (robot_pose.y != target_y):
 
         # Turn towards target
-        nav.turn_towards_target(target_x, target_y, robot)
+        nav.turn_towards_target(target_x, target_y, robot, distance)
 
         #Move forward in the direction of target having already turned to face the target
         print("Moving forward, searching for a wall or target...")
@@ -69,9 +74,14 @@ def run_robot(robot):
                 telemetry_display.setFont("Arial", 12, True)
                 if (display_status != ""):
                     telemetry_display.drawText(display_status, 1, 30)
-                            
+
+                #Get and display real pose / location   
                 true_pose = nav.get_real_pose()
                 telemetry_display.drawText(f"Location: {true_pose}", 1, 50)
+
+                #Get and display distance travelled
+                update_distance(true_pose)
+                telemetry_display.drawText(f"Distance travelled: {distance}", 1, 70)
 
             #Move the robot forward
             target_time = nav.forward(0.05,0.5)
@@ -90,6 +100,11 @@ def run_robot(robot):
             telemetry_display.setColor(0x000000)
             telemetry_display.setFont("Arial", 18, True)
             telemetry_display.drawText("Target reached, terminated", 1, 30)
+
+            #Get and display distance travelled
+            telemetry_display.setFont("Arial", 12, True)
+            update_distance(true_pose)
+            telemetry_display.drawText(f"Total distance travelled: {distance}", 1, 60)
             break
         hit_point = nav.get_real_pose()
         #Variable allows robot to wait a bit before scanning for the hit point
@@ -123,6 +138,10 @@ def run_robot(robot):
                             
                 true_pose = nav.get_real_pose()
                 telemetry_display.drawText(f"Location: {true_pose}", 1, 50)
+
+                #Get and display distance travelled
+                update_distance(true_pose)
+                telemetry_display.drawText(f"Distance travelled: {distance}", 1, 70)
 
             if wait == 40:
                 hit_point = robot_pose
@@ -165,6 +184,10 @@ def run_robot(robot):
                 true_pose = nav.get_real_pose()
                 telemetry_display.drawText(f"Location: {true_pose}", 1, 50)
 
+                #Get and display distance travelled
+                update_distance(true_pose)
+                telemetry_display.drawText(f"Distance travelled: {distance}", 1, 70)
+
             cur_distance_to_target = nav.calculate_euclidean_distance(target_x, target_y, robot_pose.x, robot_pose.y)
             nav.follow_wall(robot_velocity, 0.2, True)
 
@@ -172,6 +195,18 @@ def run_robot(robot):
                 print("Back to point of min distance to target")
                 break
 
+def update_distance(truePose):
+
+    global distance, prev_x, prev_y  
+
+    if distance == 0 and prev_x == 0 and prev_y == 0:
+        distance = 0
+    else:
+        distance = distance + math.hypot(truePose.x - prev_x, truePose.y - prev_y)
+
+    prev_x = truePose.x 
+    prev_y = truePose.y 
+    return   
 
 if __name__ == "__main__":
     # create the Supervised Robot instance.

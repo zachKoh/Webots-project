@@ -184,7 +184,7 @@ class PioneerNavigation:
         self.right_motor.setVelocity(0.0)
 
     
-    def turn_towards_target(self, target_x, target_y, robot):
+    def turn_towards_target(self, target_x, target_y, robot, distance):
 
         robot_pose = pose.Pose(0.0, 0.0, 0.0)
         prox_sensors = pps.PioneerProxSensors(robot, "sensorDisplay", robot_pose)
@@ -208,6 +208,9 @@ class PioneerNavigation:
                         
             true_pose = nav.get_real_pose()
             telemetry_display.drawText(f"Location: {true_pose}", 1, 50)
+
+            #Get and display distance travelled
+            telemetry_display.drawText(f"Distance travelled: {distance}", 1, 70)
 
         # Calculate the angle to the target
         delta_x = target_x - self.get_real_pose().x
