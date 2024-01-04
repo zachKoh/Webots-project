@@ -9,6 +9,7 @@ from controller import Supervisor, Node
 import math
 import pose
 from enum import Enum
+import pioneer_proxsensors1 as pps
 
 class MoveState(Enum):
     STOP = 0
@@ -182,8 +183,32 @@ class PioneerNavigation:
         self.left_motor.setVelocity(0.0)
         self.right_motor.setVelocity(0.0)
 
+    
+    def turn_towards_target(self, target_x, target_y, robot):
+
+        robot_pose = pose.Pose(0.0, 0.0, 0.0)
+        prox_sensors = pps.PioneerProxSensors(robot, "sensorDisplay", robot_pose)
+        nav = PioneerNavigation(robot, robot_pose, prox_sensors)
+        display_status = "Turning towards target..."
+        telemetry_display = robot.getDevice('telemetryDisplay')
         
-    def turn_towards_target(self, target_x, target_y):
+        if telemetry_display is not None:
+            telemetry_display.setColor(0xFFFFFF)
+            telemetry_display.fillRectangle(0,0,
+                    telemetry_display.getWidth(),
+                    telemetry_display.getHeight())
+        
+            telemetry_display.setColor(0x000000)
+            telemetry_display.setFont("Arial", 18, True)
+            telemetry_display.drawText("Robot Telemetry", 1, 1)
+  
+            telemetry_display.setFont("Arial", 12, True)
+            if (display_status != ""):
+                telemetry_display.drawText(display_status, 1, 30)
+                        
+            true_pose = nav.get_real_pose()
+            telemetry_display.drawText(f"Location: {true_pose}", 1, 50)
+
         # Calculate the angle to the target
         delta_x = target_x - self.get_real_pose().x
         delta_y = target_y - self.get_real_pose().y
@@ -209,6 +234,7 @@ class PioneerNavigation:
 
         # Stop the turning motion
         self.stop_turning()
+
 
     def calculate_distance(self, point1, point2):
         return math.sqrt((point1.x - point2.x)**2 + (point1.y - point2.y)**2 + (point1.theta - point2.theta)**2)

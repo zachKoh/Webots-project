@@ -10,8 +10,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5812662584967996 -0.5752853153086006 0.5754792287506264 4.177066973243786
-  position 1.9175485782485717 -0.0709813221824902 22.326830882556223
+  orientation -0.5869558177677877 -0.5809163799028688 0.5639317578830735 4.1597235248120565
+  position 3.0721845688509593 -0.37916327376856973 22.207511177644637
 }
 TexturedBackground {
 }
@@ -74,6 +74,11 @@ Pioneer3dx {
   controller "my_lab5_controller"
   supervisor TRUE
   extensionSlot [
+    Display {
+      name "telemetryDisplay"
+      width 300
+      height 128
+    }
     Camera {
       translation 0 0 0.21
     }
