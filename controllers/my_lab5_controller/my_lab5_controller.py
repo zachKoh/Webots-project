@@ -82,7 +82,6 @@ def run_robot(robot):
         robot_pose = nav.get_real_pose()
         #if robot is near enough to the target considering the traffic cone covering it
         if(nav.calculate_euclidean_distance(target_x, target_y, robot_pose.x, robot_pose.y) < 0.8):
-            print("TARGET REACHED, TERMINATED")
             telemetry_display.setColor(0xFFFFFF)
             telemetry_display.fillRectangle(0,0,
                     telemetry_display.getWidth(),
@@ -186,7 +185,6 @@ def run_robot(robot):
             nav.follow_wall(robot_velocity, 0.2, True)
 
             if (nav.calculate_distance(location_of_min_dist, robot_pose) < distance_threshold):
-                print("Back to point of min distance to target")
                 break
 
 #updates the distance by measuring distance from prev x and y and adding to distance variable

@@ -114,7 +114,6 @@ class PioneerNavigation:
         self.total_error += error
 
         control = (kp * prop) + (ki * self.total_error) + (kd * diff)
-        #print(control)
 
         #limit the control output to prevent big changes
         max_control = 1

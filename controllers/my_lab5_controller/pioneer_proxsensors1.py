@@ -67,14 +67,12 @@ class PioneerProxSensors:
         # ------------------------------------------
         # Determine max range from lookup table
         lt = self.ps[0].getLookupTable()
-        print(f"Lookup Table has {len(lt)} entries")
         self.max_range = 0.0
         for i in range(len(lt)):
             if ((i%3) == 0):
                 self.max_range = lt[i]
-            print(f" {lt[i]}", end='')
             if ((i%3) == 2):
-                print("") # Newline
+                print("")
         self.max_value = self.ps[0].getMaxValue()
 
         self.display = robot.getDevice(display_name)
