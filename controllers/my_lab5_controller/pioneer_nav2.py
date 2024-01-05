@@ -128,7 +128,7 @@ class PioneerNavigation:
         self.left_motor.setVelocity(lv)
         self.right_motor.setVelocity(rv)
 
-    
+    '''
     def pid(self, error):
         kp = 0.5 # proportional weight (may need tuning)
         kd = 3.0 # differential weight (may need tuning)
@@ -141,7 +141,27 @@ class PioneerNavigation:
         self.prev_error = error
     
         return control
-    
+    '''
+
+    def pid(self, error):
+        kp = 0.5  # Proportional weight (may need tuning)
+        kd = 3.0  # Derivative weight (may need tuning)
+        ki = 0.0  # Integral weight (may need tuning)
+
+        prop = error
+        diff = error - self.prev_error
+        self.total_error += error
+
+        control = (kp * prop) + (ki * self.total_error) + (kd * diff)
+        #print(control)
+
+        #limit the control output to prevent big changes
+        max_control = 1
+        control = max(min(control, max_control), -max_control)
+
+        self.prev_error = error
+
+        return control
 
     def follow_wall(self, robot_linearvelocity, set_point, right=True):
 
@@ -167,11 +187,16 @@ class PioneerNavigation:
                                 self.prox_sensors.get_value(8))
   
             # Running aproximately parallel to the wall
-            if (wall_dist < self.prox_sensors.max_range):
+            if (wall_dist < self.prox_sensors.max_range and self.prox_sensors.get_value(7) < 1):
+                print("hey")
                 error = wall_dist - set_point
                 control = self.pid(error)
                 # adjust for right wall
                 self.set_velocity(robot_linearvelocity, control*direction_coeff)
+            elif (self.prox_sensors.get_value(7) > 1):
+                # No wall, so turn
+                print("turn detected")
+                self.set_velocity(robot_linearvelocity, 0.20*direction_coeff)
             else:
                 # No wall, so turn
                 self.set_velocity(robot_linearvelocity, 0.20*direction_coeff)

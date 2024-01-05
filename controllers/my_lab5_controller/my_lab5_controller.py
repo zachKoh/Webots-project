@@ -90,7 +90,7 @@ def run_robot(robot):
         #Stop when a wall is detected in front
         nav.stop()
         robot_pose = nav.get_real_pose()
-        if(nav.calculate_euclidean_distance(target_x, target_y, robot_pose.x, robot_pose.y) < 0.5):
+        if(nav.calculate_euclidean_distance(target_x, target_y, robot_pose.x, robot_pose.y) < 0.8):
             print("TARGET REACHED, TERMINATED")
             telemetry_display.setColor(0xFFFFFF)
             telemetry_display.fillRectangle(0,0,
