@@ -1,19 +1,8 @@
-"""my_lab4_controller controller."""
-
-# my_lab4_controller Class Definition
-# File: my_lab4_controller.py
-# Date: 15th Nov 2022
-# Description: Simple Controller based on 2021 version (2022)
-# Author: Terry Payne (trp@liv.ac.uk)
-#
-
 from controller import Supervisor
 import pioneer_nav2 as pn
 import math
 import pose
 import pioneer_proxsensors1 as pps
-
-from pioneer_nav2 import MoveState
 
 # for distance calculations
 distance = 0
@@ -25,6 +14,7 @@ def run_robot(robot):
     # get the time step of the current world.
     timestep = int(robot.getBasicTimeStep())
 
+    #set up camera
     camera = robot.getDevice('camera')
     if camera is not None:
         camera.enable(timestep)
@@ -45,13 +35,13 @@ def run_robot(robot):
     # set up the display
     telemetry_display = robot.getDevice('telemetryDisplay')
 
+    #while robot has not reached target
     while (robot_pose.x != target_x) and (robot_pose.y != target_y):
 
         # Turn towards target
         nav.turn_towards_target(target_x, target_y, robot, distance)
 
         #Move forward in the direction of target having already turned to face the target
-        print("Moving forward, searching for a wall or target...")
         while not (min(nav.prox_sensors.get_value(1), 
         nav.prox_sensors.get_value(2),
         nav.prox_sensors.get_value(3),
@@ -90,6 +80,7 @@ def run_robot(robot):
         #Stop when a wall is detected in front
         nav.stop()
         robot_pose = nav.get_real_pose()
+        #if robot is near enough to the target considering the traffic cone covering it
         if(nav.calculate_euclidean_distance(target_x, target_y, robot_pose.x, robot_pose.y) < 0.8):
             print("TARGET REACHED, TERMINATED")
             telemetry_display.setColor(0xFFFFFF)
@@ -109,7 +100,7 @@ def run_robot(robot):
         hit_point = nav.get_real_pose()
         #Variable allows robot to wait a bit before scanning for the hit point
         wait = 0
-
+        #declaring variable with a reasonable starting value that is high enough
         min_distance_to_target = 100
 
         #Move around the whole perimeter of the obstacle
@@ -143,9 +134,11 @@ def run_robot(robot):
                 update_distance(true_pose)
                 telemetry_display.drawText(f"Distance travelled: {distance}", 1, 70)
 
+            #wait for the robot to orient itself next to the wall before recording hit point
             if wait == 40:
                 hit_point = robot_pose
 
+            #keep updating minimum distance and location of min distance
             cur_distance_to_target = nav.calculate_euclidean_distance(target_x, target_y, robot_pose.x, robot_pose.y) 
             if cur_distance_to_target < min_distance_to_target:
                 min_distance_to_target = cur_distance_to_target
@@ -153,12 +146,13 @@ def run_robot(robot):
 
             nav.follow_wall(robot_velocity, 0.2, True)
 
-            distance_threshold = 0.6  #adjust through trial and error
-            #print("Distance to hit point: " + str(nav.calculate_distance(hit_point, robot_pose)))
+            #so that robot doesn't have to return to exact coordinates as path may deviate a bit
+            distance_threshold = 0.6
             if (nav.calculate_distance(hit_point, robot_pose) < distance_threshold) and (wait > 150):
                 break
         
-
+        
+        #Follow wall around again until point on wall closest to target is reached
         while robot.step(timestep) != -1:
             
             robot_pose = nav.get_real_pose()
@@ -195,10 +189,12 @@ def run_robot(robot):
                 print("Back to point of min distance to target")
                 break
 
+#updates the distance by measuring distance from prev x and y and adding to distance variable
 def update_distance(truePose):
 
     global distance, prev_x, prev_y  
 
+    #handles first loop
     if distance == 0 and prev_x == 0 and prev_y == 0:
         distance = 0
     else:
